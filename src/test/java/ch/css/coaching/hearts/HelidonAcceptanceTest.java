@@ -15,6 +15,7 @@ import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -101,10 +102,10 @@ class HelidonAcceptanceTest {
         registerClientSocket(player3Socket);
         registerClientSocket(player4Socket);
 
-        await().untilAsserted(() -> assertThat(player1Socket.gameStarted()).isTrue());
-        await().untilAsserted(() -> assertThat(player2Socket.gameStarted()).isTrue());
-        await().untilAsserted(() -> assertThat(player3Socket.gameStarted()).isTrue());
-        await().untilAsserted(() -> assertThat(player4Socket.gameStarted()).isTrue());
+        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player1Socket.gameStarted()).isTrue());
+        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player2Socket.gameStarted()).isTrue());
+        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player3Socket.gameStarted()).isTrue());
+        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player4Socket.gameStarted()).isTrue());
     }
 
     private void registerClientSocket(WebsocketTestClient player1Socket) throws DeploymentException, IOException {
