@@ -1,5 +1,6 @@
 package ch.css.coaching.hearts;
 
+import io.helidon.common.http.MediaType;
 import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.WebServer;
@@ -59,6 +60,16 @@ class HelidonAcceptanceTest {
                 .path("/metrics")
                 .request()
                 .thenAccept(response -> assertThat(response.status().code()).isEqualTo(200))
+                .toCompletableFuture()
+                .get();
+    }
+
+    @Test
+    void rootReturnsIndexHtml() throws Exception {
+        webClient.get()
+                .path("/")
+                .request()
+                .thenAccept(response -> assertThat(response.headers().contentType().get()).isEqualTo(MediaType.TEXT_HTML))
                 .toCompletableFuture()
                 .get();
     }
