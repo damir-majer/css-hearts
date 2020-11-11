@@ -65,7 +65,7 @@ assemble.dependsOn copyLibs
 jar {
     archiveFileName = "${project.name}.jar"
     manifest {
-        attributes ('Main-Class': 'io.helidon.examples.quickstart.se.Main',
+        attributes ('Main-Class': 'ch.css.coaching.hearts.Main',
                 'Class-Path': configurations.runtimeClasspath.files.collect { "libs/$it.name" }.join(' ')
         )
     }
