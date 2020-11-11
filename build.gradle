@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "org.sonarqube" version "3.0"
 }
 
 group 'ch.css.coaching.hearts'
@@ -68,5 +69,13 @@ jar {
         attributes ('Main-Class': 'ch.css.coaching.hearts.Main',
                 'Class-Path': configurations.runtimeClasspath.files.collect { "libs/$it.name" }.join(' ')
         )
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "damir-majer_css-hearts"
+        property "sonar.organization", "damir-majer"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }

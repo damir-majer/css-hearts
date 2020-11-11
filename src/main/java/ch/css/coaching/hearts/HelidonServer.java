@@ -1,24 +1,32 @@
 package ch.css.coaching.hearts;
 
+import ch.css.coaching.hearts.presentation.GameEndpoint;
 import io.helidon.config.Config;
 import io.helidon.health.HealthSupport;
 import io.helidon.health.checks.HealthChecks;
 import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.metrics.MetricsSupport;
 import io.helidon.webserver.Routing;
+import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
+import io.helidon.webserver.tyrus.TyrusSupport;
 
+import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 
 public class HelidonServer {
 
-    private HelidonServer() {}
+    public static final MainModule mainModule = new MainModule();
+
+    private HelidonServer() {
+    }
 
 
     /**
      * Start the server.
+     *
      * @return the created {@link WebServer} instance
      * @throws IOException if there are problems reading logging properties
      */
@@ -54,19 +62,25 @@ public class HelidonServer {
     /**
      * Creates new {@link Routing}.
      *
-     * @return routing configured with JSON support, a health check, and a service
      * @param config configuration of this server
+     * @return routing configured with JSON support, a health check, and a service
      */
     private static Routing createRouting(Config config) {
 
         MetricsSupport metrics = MetricsSupport.create();
         HealthSupport health = HealthSupport.builder()
-                .addLiveness(HealthChecks.healthChecks())
+                .addLiveness(HealthChecks.deadlockCheck(), HealthChecks.heapMemoryCheck())
                 .build();
 
         return Routing.builder()
                 .register(health)  // Health at "/health"
                 .register(metrics) // Metrics at "/metrics"
+                .register("/", TyrusSupport.builder().register(
+                        ServerEndpointConfig.Builder.create(GameEndpoint.class, "/")
+                                .build())
+                        .build())
+                .register("/", StaticContentSupport.builder("/assets")
+                        .welcomeFileName("index.html"))
                 .build();
     }
 
