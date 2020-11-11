@@ -4,11 +4,16 @@ import io.helidon.common.http.MediaType;
 import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.WebServer;
+import org.glassfish.tyrus.client.ClientManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.websocket.ClientEndpointConfig;
+import javax.websocket.DeploymentException;
+import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,4 +78,37 @@ class HelidonAcceptanceTest {
                 .toCompletableFuture()
                 .get();
     }
+
+    @Test
+    void connectToWebSocket() throws IOException, DeploymentException {
+        WebsocketTestClient player = new WebsocketTestClient();
+        registerClientSocket(player);
+        assertThat(player.isOpen()).isTrue();
+    }
+
+    @Test
+    void initializeGame() throws IOException, DeploymentException {
+        WebsocketTestClient player1Socket = new WebsocketTestClient();
+        WebsocketTestClient player2Socket = new WebsocketTestClient();
+        WebsocketTestClient player3Socket = new WebsocketTestClient();
+        WebsocketTestClient player4Socket = new WebsocketTestClient();
+
+        registerClientSocket(player1Socket);
+        registerClientSocket(player2Socket);
+        registerClientSocket(player3Socket);
+        registerClientSocket(player4Socket);
+
+        assertThat(player1Socket.gameStarted()).isTrue();
+        assertThat(player2Socket.gameStarted()).isTrue();
+        assertThat(player3Socket.gameStarted()).isTrue();
+        assertThat(player4Socket.gameStarted()).isTrue();
+    }
+
+    private void registerClientSocket(WebsocketTestClient player1Socket) throws DeploymentException, IOException {
+        ClientManager.createClient().connectToServer(player1Socket,
+                ClientEndpointConfig.Builder.create()
+                        .build(), URI.create("ws://localhost:" + webServer.port() + "/")
+        );
+    }
+
 }
