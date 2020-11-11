@@ -14,7 +14,7 @@ public class WebsocketTestClient extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig config) {
         this.session = session;
-        session.addMessageHandler(Messages.GameStarted.class, message -> gameStarted = true);
+        session.addMessageHandler(Messages.Message.class, message -> checkGameStarted(message));
     }
 
     public boolean isOpen() {
@@ -23,5 +23,11 @@ public class WebsocketTestClient extends Endpoint {
 
     public boolean gameStarted() {
         return gameStarted;
+    }
+
+    private void checkGameStarted(Messages.Message message) {
+        if (message instanceof Messages.GameStarted) {
+            gameStarted = true;
+        }
     }
 }

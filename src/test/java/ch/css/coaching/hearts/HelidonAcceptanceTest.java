@@ -1,5 +1,6 @@
 package ch.css.coaching.hearts;
 
+import ch.css.coaching.hearts.decoder.GameStartedDecoder;
 import io.helidon.common.http.MediaType;
 import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.webclient.WebClient;
@@ -11,9 +12,12 @@ import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 class HelidonAcceptanceTest {
 
@@ -84,7 +88,6 @@ class HelidonAcceptanceTest {
     }
 
     @Test
-    @Disabled
     void initializeGame() throws IOException, DeploymentException {
         WebsocketTestClient player1Socket = new WebsocketTestClient();
         WebsocketTestClient player2Socket = new WebsocketTestClient();
@@ -96,15 +99,16 @@ class HelidonAcceptanceTest {
         registerClientSocket(player3Socket);
         registerClientSocket(player4Socket);
 
-        assertThat(player1Socket.gameStarted()).isTrue();
-        assertThat(player2Socket.gameStarted()).isTrue();
-        assertThat(player3Socket.gameStarted()).isTrue();
-        assertThat(player4Socket.gameStarted()).isTrue();
+        await().untilAsserted(() -> assertThat(player1Socket.gameStarted()).isTrue());
+        await().untilAsserted(() -> assertThat(player2Socket.gameStarted()).isTrue());
+        await().untilAsserted(() -> assertThat(player3Socket.gameStarted()).isTrue());
+        await().untilAsserted(() -> assertThat(player4Socket.gameStarted()).isTrue());
     }
 
     private void registerClientSocket(WebsocketTestClient player1Socket) throws DeploymentException, IOException {
         ClientManager.createClient().connectToServer(player1Socket,
                 ClientEndpointConfig.Builder.create()
+                        .decoders(Collections.singletonList(GameStartedDecoder.class))
                         .build(), URI.create("ws://localhost:" + webServer.port() + "/")
         );
     }
