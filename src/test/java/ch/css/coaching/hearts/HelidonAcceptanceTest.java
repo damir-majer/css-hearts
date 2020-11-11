@@ -6,13 +6,15 @@ import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.WebServer;
 import org.glassfish.tyrus.client.ClientManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -75,7 +77,7 @@ class HelidonAcceptanceTest {
         webClient.get()
                 .path("/")
                 .request()
-                .thenAccept(response -> assertThat(response.headers().contentType().get()).isEqualTo(MediaType.TEXT_HTML))
+                .thenAccept(response -> assertThat(response.headers().contentType()).contains(MediaType.TEXT_HTML))
                 .toCompletableFuture()
                 .get();
     }

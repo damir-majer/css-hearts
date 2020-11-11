@@ -14,18 +14,19 @@ import io.helidon.webserver.tyrus.TyrusSupport;
 import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.logging.LogManager;
 
 public class HelidonServer {
 
     public static final MainModule mainModule = new MainModule();
 
-    private HelidonServer() {}
+    private HelidonServer() {
+    }
 
 
     /**
      * Start the server.
+     *
      * @return the created {@link WebServer} instance
      * @throws IOException if there are problems reading logging properties
      */
@@ -61,8 +62,8 @@ public class HelidonServer {
     /**
      * Creates new {@link Routing}.
      *
-     * @return routing configured with JSON support, a health check, and a service
      * @param config configuration of this server
+     * @return routing configured with JSON support, a health check, and a service
      */
     private static Routing createRouting(Config config) {
 
@@ -79,7 +80,7 @@ public class HelidonServer {
                                 .build())
                         .build())
                 .register("/", StaticContentSupport.builder("/assets")
-                    .welcomeFileName("index.html"))
+                        .welcomeFileName("index.html"))
                 .build();
     }
 

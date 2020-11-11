@@ -16,7 +16,7 @@ public class WebSocketGame {
 
     public void addPlayerSession(Session playerSession) {
         playerSessions.add(playerSession);
-        if(isLobbyFull()) {
+        if (isLobbyFull()) {
             triggerGameStart();
         }
     }
