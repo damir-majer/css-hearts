@@ -76,7 +76,7 @@ public class HelidonServer {
                 .register(health)  // Health at "/health"
                 .register(metrics) // Metrics at "/metrics"
                 .register("/", TyrusSupport.builder().register(
-                        ServerEndpointConfig.Builder.create(GameEndpoint.class, "/")
+                        ServerEndpointConfig.Builder.create(GameEndpoint.class, "/{playerName}")
                                 .build())
                         .build())
                 .register("/", StaticContentSupport.builder("/assets")
