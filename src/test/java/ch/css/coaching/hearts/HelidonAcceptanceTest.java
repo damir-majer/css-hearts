@@ -6,13 +6,15 @@ import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.WebServer;
 import org.glassfish.tyrus.client.ClientManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -89,7 +91,6 @@ class HelidonAcceptanceTest {
     }
 
     @Test
-    @Disabled("Await is not working, yet")
     void initializeGame() throws IOException, DeploymentException {
         WebsocketTestClient player1Socket = new WebsocketTestClient();
         WebsocketTestClient player2Socket = new WebsocketTestClient();
