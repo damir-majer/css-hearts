@@ -13,9 +13,16 @@ class GameTest {
     void acceptanceTest() {
         List<Player> playerList = asList(new Player(), new Player(), new Player(), new Player());
         Game sut = new Game(new Deck(), playerList);
+        Player nexPlayer = sut.getNextPlayer();
+        GameState gameState = sut.playMove(nextPlayer, card);
+
+
+
+
         Round round = sut.createNewRound(new Table());
+
+        assertThat(round.getNextPlayer()).equalTo()
         //Create new Deck
-        RoundState roundState = round.getCurrentState();
         Player nextPlayer = roundState.getNextPlayer();
         assertThat(playerList).contains(nextPlayer);
 
