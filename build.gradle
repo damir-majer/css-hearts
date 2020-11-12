@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    //id 'jacoco'
+    id 'jacoco'
     id "org.sonarqube" version "3.0"
 }
 
@@ -80,11 +80,9 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
     }
 }
-/*
 jacocoTestReport {
     reports {
         xml.enabled true
     }
 }
 test.finalizedBy jacocoTestReport
-*/
