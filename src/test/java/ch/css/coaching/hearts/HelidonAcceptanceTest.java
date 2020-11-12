@@ -12,7 +12,6 @@ import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -89,7 +88,6 @@ class HelidonAcceptanceTest {
     }
 
     @Test
-    @Disabled("Await is not working, yet")
     void gameInitialization_FourClientsRequestRegistration_AllClientsReceivedGameStartedMessage() throws IOException, DeploymentException {
         WebsocketTestClient player1Socket = new WebsocketTestClient();
         WebsocketTestClient player2Socket = new WebsocketTestClient();

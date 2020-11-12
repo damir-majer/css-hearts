@@ -14,7 +14,7 @@ public class WebsocketTestClient extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig config) {
         this.session = session;
-        session.addMessageHandler(Messages.Message.class, message -> checkGameStarted(message));
+        session.addMessageHandler(Messages.Message.class, this::checkGameStarted);
     }
 
     public boolean isOpen() {
