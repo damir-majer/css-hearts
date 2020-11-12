@@ -54,7 +54,7 @@ class HelidonAcceptanceTest {
     }
 
     @Test
-    void healthAndMetricsUp() throws Exception {
+    void serverEndpoints_ServerStarted_HealthAndMetricsUp() throws Exception {
         webClient.get()
                 .path("/health")
                 .request()
@@ -71,7 +71,7 @@ class HelidonAcceptanceTest {
     }
 
     @Test
-    void rootReturnsIndexHtml() throws Exception {
+    void serverEndpoints_ServerStarted_RootReturnsIndexHtml() throws Exception {
         webClient.get()
                 .path("/")
                 .request()
@@ -81,7 +81,7 @@ class HelidonAcceptanceTest {
     }
 
     @Test
-    void connectToWebSocket() throws IOException, DeploymentException {
+    void clientRegistration_ClientRequestsRegistration_ClientWebSocketOpen() throws IOException, DeploymentException {
         WebsocketTestClient player = new WebsocketTestClient();
         registerClientSocket(player);
         assertThat(player.isOpen()).isTrue();
@@ -89,7 +89,7 @@ class HelidonAcceptanceTest {
 
     @Test
     @Disabled("Await is not working, yet")
-    void initializeGame() throws IOException, DeploymentException {
+    void gameInitialization_FourClientsRequestRegistration_AllClientsReceivedGameStartedMessage() throws IOException, DeploymentException {
         WebsocketTestClient player1Socket = new WebsocketTestClient();
         WebsocketTestClient player2Socket = new WebsocketTestClient();
         WebsocketTestClient player3Socket = new WebsocketTestClient();

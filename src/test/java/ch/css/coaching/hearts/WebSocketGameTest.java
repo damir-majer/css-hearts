@@ -12,13 +12,13 @@ import static org.mockito.Mockito.when;
 class WebSocketGameTest {
 
     @Test
-    void initializeGameIsWaitingForFurtherPlayers() {
+    void initializeGame_NoPlayerConnected_LobbyIsNotFull() {
         WebSocketGame sut = new WebSocketGame();
         assertThat(sut.isLobbyFull()).isFalse();
     }
 
     @Test
-    void initializeGameWithOnePlayerIsWaitingForFurtherPlayers() {
+    void initializeGame_OnePlayerConnected_LobbyIsNotFull() {
         WebSocketGame sut = new WebSocketGame();
 
         sut.addPlayerSession(mock(Session.class));
@@ -27,7 +27,7 @@ class WebSocketGameTest {
     }
 
     @Test
-    void initializeGameWithFourPlayersIsReady() {
+    void initializeGame_FourPlayersConnected_LobbyIsFull() {
         WebSocketGame sut = new WebSocketGame();
         Session mock = mock(Session.class);
         when(mock.getBasicRemote()).thenReturn(mock(RemoteEndpoint.Basic.class));
