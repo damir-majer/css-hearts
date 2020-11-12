@@ -7,9 +7,84 @@
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet"
           href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <script type="application/javascript">
+        function onload() {
+            document.getElementById("joinButton").onclick = function (e) {
+                let playerNameField = document.getElementById("playerName");
+                connectToGame(playerNameField.textContent);
+            }
+        }
+
+        function hideLoading() {
+            document.getElementById("loading").style.visibility = 'hidden';
+        }
+
+        function showLoading() {
+            document.getElementById("loading").style.visibility = 'visible';
+        }
+
+        function hideLobby() {
+            document.getElementById("lobby").style.visibility = 'hidden';
+        }
+
+        function showGame() {
+            document.getElementById("game").style.visibility = 'visible';
+        }
+
+        function connectToGame(playerName) {
+
+            let websocket = new WebSocket("ws://" + window.location.host + "/" + playerName);
+
+            websocket.onopen = function (e) {
+                console.log("onopen");
+                hideLobby();
+                showLoading();
+            }
+            websocket.onmessage = function (e) {
+                console.log("message:" + e.data);
+
+                let message = JSON.parse(e.data);
+                switch (message.type) {
+                    case "GameStarted":
+                        hideLoading();
+                        showGame();
+                        break;
+                }
+            }
+            websocket.onerror = function (e) {
+                console.log("error: " + e);
+            }
+            websocket.onclose = function (e) {
+                console.log("closed");
+            }
+        }
+    </script>
+
+    <style>
+        #loading {
+            visibility: hidden;
+        }
+        #game {
+            visibility: hidden;
+        }
+        .loader {
+            border-top-color: #3498db;
+            animation: spinner 1.5s linear infinite;
+        }
+
+        @-webkit-keyframes spinner {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 
-<body>
+<body onload="onload()">
 
 <header class="text-gray-700 body-font">
     <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
@@ -20,6 +95,15 @@
     </div>
 </header>
 
+<section id="loading" class="text-gray-700 body-font">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="flex flex-col text-center w-full mb-12">
+            <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32 mx-auto justify-self-center"></div>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Waiting for other players to join the game.</p>
+        </div>
+    </div>
+</section>
+
 
 <section id="lobby" class="text-gray-700 body-font">
     <div class="container px-5 py-24 mx-auto">
@@ -29,16 +113,24 @@
         </div>
         <div class="flex lg:w-1/3 w-full sm:flex-row flex-col mx-auto px-8 sm:px-0 items-end">
             <div class="relative sm:mr-4 mb-4 sm:mb-0 flex-grow w-full">
-                <input type="text" id="name" name="name" placeholder="Name" required
+                <input type="text" id="playerName" name="playerName" placeholder="Name" required
                        class="w-full bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
             </div>
-            <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded inline-flex items-center text-lg">
+            <button id="joinButton" class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded inline-flex items-center text-lg">
                 <i class="las la-sign-in-alt la-lg"></i>&nbsp;Join
             </button>
         </div>
     </div>
 </section>
 
+<section id="game" class="text-gray-700 body-font">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="flex flex-col text-center w-full mb-12">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"></h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Game started!</p>
+        </div>
+    </div>
+</section>
 
 
 </body>
