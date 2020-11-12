@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -100,11 +101,10 @@ class HelidonAcceptanceTest {
         registerClientSocket(player3Socket);
         registerClientSocket(player4Socket);
 
-        // todo - fix this on github actions
-        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player1Socket.gameStarted()).isTrue());
-        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player2Socket.gameStarted()).isTrue());
-        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player3Socket.gameStarted()).isTrue());
-        await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> assertThat(player4Socket.gameStarted()).isTrue());
+        await().atMost(1, MINUTES).untilAsserted(() -> assertThat(player1Socket.gameStarted()).isTrue());
+        await().atMost(1, MINUTES).untilAsserted(() -> assertThat(player2Socket.gameStarted()).isTrue());
+        await().atMost(1, MINUTES).untilAsserted(() -> assertThat(player3Socket.gameStarted()).isTrue());
+        await().atMost(1, MINUTES).untilAsserted(() -> assertThat(player4Socket.gameStarted()).isTrue());
     }
 
     private void registerClientSocket(WebsocketTestClient player1Socket) throws DeploymentException, IOException {
