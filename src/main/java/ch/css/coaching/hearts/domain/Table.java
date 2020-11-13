@@ -11,4 +11,7 @@ public class Table {
         cardsOnTable = new HashMap<>();
     }
 
+    public void putCardOnTable(Player player, Card playedCard) {
+        cardsOnTable.put(player, playedCard);
+    }
 }

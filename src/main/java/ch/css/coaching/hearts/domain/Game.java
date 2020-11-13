@@ -13,7 +13,7 @@ public class Game {
     }
 
     public GameState start() {
-        return new GameState(null);
+        return new GameState(new Table());
     }
 
     public GameState playMove(Player player, Card card) {

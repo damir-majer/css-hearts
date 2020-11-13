@@ -1,5 +1,6 @@
 package ch.css.coaching.hearts.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,6 +12,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class GameTest {
+
+    private Game sut;
+    private Player player1;
+
+    @BeforeEach
+    void setUp() {
+        player1 = new Player();
+        sut = new Game(new Deck(), List.of(player1, new Player(), new Player(), new Player()));
+    }
 
     @Test
     void acceptance_TwoCardsOnly_FirstPlayerWins() throws NoCardsAvailableException {
@@ -44,9 +54,16 @@ class GameTest {
 
     @Test
     void gameStart_GameInitialized_InitialStateReturned() {
-        Game sut = new Game(new Deck(), List.of(new Player(), new Player(), new Player(), new Player()));
 
         assertThat(sut.start()).isEqualToComparingFieldByField(new GameState(new Table()));
     }
 
+    @Test
+    void playMove_IfCardPlayed_StateChanged() {
+        Table tableWithOneCard = new Table();
+        Card playedCard = new Card(Card.ACE, Card.CLUBS);
+        tableWithOneCard.putCardOnTable(player1, playedCard);
+
+        assertThat(sut.playMove(player1, playedCard)).isEqualToComparingFieldByField(new GameState(tableWithOneCard));
+    }
 }
