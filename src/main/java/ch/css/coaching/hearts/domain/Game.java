@@ -11,4 +11,12 @@ public class Game {
         this.deck = deck;
         this.playerList = playerList;
     }
+
+    public GameState start() {
+        return new GameState(null);
+    }
+
+    public GameState playMove(Player player, Card card) {
+        return new GameState(null);
+    }
 }
