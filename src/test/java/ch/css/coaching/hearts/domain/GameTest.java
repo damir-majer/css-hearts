@@ -37,7 +37,7 @@ class GameTest {
                 .thenReturn(List.of(new Card(Card.JACK, Card.CLUBS), new Card(Card.JACK, Card.HEARTS)));
 
         Game sut = new Game(deckMock, playerList);
-        sut.start();
+        sut.getCurrentState();
         // round one
         sut.playMove(player1, new Card(Card.ACE, Card.CLUBS));
         sut.playMove(player2, new Card(Card.KING, Card.CLUBS));
@@ -55,7 +55,7 @@ class GameTest {
     @Test
     void gameStart_GameInitialized_InitialStateReturned() {
 
-        assertThat(sut.start()).isEqualToComparingFieldByField(new GameState(new Table()));
+        assertThat(sut.getCurrentState()).isEqualToComparingFieldByField(new GameState(new Table()));
     }
 
     @Test
