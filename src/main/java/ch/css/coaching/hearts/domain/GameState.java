@@ -4,9 +4,15 @@ import java.util.Optional;
 
 public class GameState {
 
+    private final Table table;
     private Player winner;
 
-    public GameState(Player winner) {
+    public GameState(Table table) {
+        this(table, null);
+    }
+
+    public GameState(Table table, Player winner) {
+        this.table = table;
         this.winner = winner;
     }
 

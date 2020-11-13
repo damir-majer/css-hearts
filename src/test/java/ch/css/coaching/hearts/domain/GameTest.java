@@ -42,4 +42,11 @@ class GameTest {
         assertThat(lastGameState.getWinner()).contains(player1);
     }
 
+    @Test
+    void gameStart_GameInitialized_InitialStateReturned() {
+        Game sut = new Game(new Deck(), List.of(new Player(), new Player(), new Player(), new Player()));
+
+        assertThat(sut.start()).isEqualToComparingFieldByField(new GameState(new Table()));
+    }
+
 }
