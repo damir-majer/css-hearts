@@ -6,12 +6,15 @@ import io.helidon.media.jsonp.JsonpSupport;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.WebServer;
 import org.glassfish.tyrus.client.ClientManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +24,8 @@ import static org.awaitility.Awaitility.await;
 
 class HelidonAcceptanceTest {
 
+    private static final int SERVER_STARTUP_TIMEOUT = 1000;
+
     private static WebServer webServer;
     private static WebClient webClient;
 
@@ -28,15 +33,9 @@ class HelidonAcceptanceTest {
     public static void startTheServer() throws Exception {
         webServer = HelidonServer.start();
 
-        long timeout = 2000; // 2 seconds should be enough to start the server
-        long now = System.currentTimeMillis();
+        await().atMost(Duration.ofMillis(SERVER_STARTUP_TIMEOUT))
+                .until(() -> webServer.isRunning());
 
-        while (!webServer.isRunning()) {
-            Thread.sleep(100);
-            if ((System.currentTimeMillis() - now) > timeout) {
-                Assertions.fail("Failed to start webserver");
-            }
-        }
 
         webClient = WebClient.builder()
                 .baseUri("http://localhost:" + webServer.port())
