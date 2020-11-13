@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class WebSocketGame {
 
-    private static final Logger LOGGER = Logger.getLogger(HelidonServer.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(WebSocketGame.class.getName());
     private List<Session> playerSessions = new ArrayList<>();
 
     public boolean isLobbyFull() {

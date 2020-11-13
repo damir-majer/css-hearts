@@ -61,7 +61,7 @@ class GameTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("Not yet implemented")
     void playMove_IfCardPlayed_StateChanged() {
         Table tableWithOneCard = new Table();
         Card playedCard = new Card(Card.ACE, Card.CLUBS);
