@@ -9,7 +9,7 @@ import javax.websocket.Session;
 
 public class GameEndpoint extends Endpoint {
 
-    private final WebSocketGame webSocketGame = HelidonServer.mainModule.webSocketGame;
+    private final static WebSocketGame webSocketGame = HelidonServer.mainModule.webSocketGame;
 
     @Override
     public void onOpen(Session session, EndpointConfig config) {

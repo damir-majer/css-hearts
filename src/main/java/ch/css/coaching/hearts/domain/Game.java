@@ -11,7 +11,4 @@ public class Game {
         this.deck = deck;
         this.playerList = playerList;
     }
-
-    public ch.css.coaching.hearts.domain.Round createNewRound(Table table) {
-    }
 }

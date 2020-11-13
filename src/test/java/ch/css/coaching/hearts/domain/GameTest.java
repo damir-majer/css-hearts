@@ -13,20 +13,7 @@ class GameTest {
     void acceptanceTest() {
         List<Player> playerList = asList(new Player(), new Player(), new Player(), new Player());
         Game sut = new Game(new Deck(), playerList);
-        Player nexPlayer = sut.getNextPlayer();
-        GameState gameState = sut.playMove(nextPlayer, card);
 
-
-
-
-        Round round = sut.createNewRound(new Table());
-
-        assertThat(round.getNextPlayer()).equalTo()
-        //Create new Deck
-        Player nextPlayer = roundState.getNextPlayer();
-        assertThat(playerList).contains(nextPlayer);
-
-        roundState = round.playMove(Player player, Card card);
         //for number players dealCards
         //determine first player
         //for number of cards in users hands

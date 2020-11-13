@@ -6,8 +6,12 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WebSocketGame {
+
+    private static final Logger LOGGER = Logger.getLogger(HelidonServer.class.getName());
     private List<Session> playerSessions = new ArrayList<>();
 
     public boolean isLobbyFull() {
@@ -26,7 +30,7 @@ public class WebSocketGame {
             try {
                 playerSession.getBasicRemote().sendText(new Messages.GameStarted().toJson());
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Unable to send game-start message", e);
             }
         });
     }

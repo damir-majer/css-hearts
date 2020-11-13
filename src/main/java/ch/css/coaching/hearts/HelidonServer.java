@@ -14,11 +14,15 @@ import io.helidon.webserver.tyrus.TyrusSupport;
 import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class HelidonServer {
 
     public static final MainModule mainModule = new MainModule();
+
+    private static final Logger LOGGER = Logger.getLogger(HelidonServer.class.getName());
 
     private HelidonServer() {
     }
@@ -36,21 +40,19 @@ public class HelidonServer {
         // By default this will pick up application.yaml from the classpath
         Config config = Config.create();
 
-        WebServer server = WebServer.builder(createRouting(config))
+        WebServer server = WebServer.builder(createRouting())
                 .config(config.get("server"))
                 .addMediaSupport(JsonpSupport.create())
                 .build();
 
         server.start()
                 .thenAccept(ws -> {
-                    System.out.println(
-                            "Web server is up! http://localhost:" + ws.port());
+                    LOGGER.info("Web server is up! http://localhost:" + ws.port());
                     ws.whenShutdown().thenRun(()
-                            -> System.out.println("Web server is DOWN. Good bye!"));
+                            -> LOGGER.info("Web server is DOWN. Good bye!"));
                 })
                 .exceptionally(t -> {
-                    System.err.println("Startup failed: " + t.getMessage());
-                    t.printStackTrace(System.err);
+                    LOGGER.log(Level.SEVERE, "Startup failed: ", t);
                     return null;
                 });
 
@@ -61,11 +63,9 @@ public class HelidonServer {
 
     /**
      * Creates new {@link Routing}.
-     *
-     * @param config configuration of this server
      * @return routing configured with JSON support, a health check, and a service
      */
-    private static Routing createRouting(Config config) {
+    private static Routing createRouting() {
 
         MetricsSupport metrics = MetricsSupport.create();
         HealthSupport health = HealthSupport.builder()
